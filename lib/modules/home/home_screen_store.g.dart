@@ -25,10 +25,61 @@ mixin _$HomeScreenStore on _HomeScreenStore, Store {
     });
   }
 
+  late final _$soundIndexAtom =
+      Atom(name: '_HomeScreenStore.soundIndex', context: context);
+
+  @override
+  int get soundIndex {
+    _$soundIndexAtom.reportRead();
+    return super.soundIndex;
+  }
+
+  @override
+  set soundIndex(int value) {
+    _$soundIndexAtom.reportWrite(value, super.soundIndex, () {
+      super.soundIndex = value;
+    });
+  }
+
+  late final _$isMenuOpenAtom =
+      Atom(name: '_HomeScreenStore.isMenuOpen', context: context);
+
+  @override
+  bool get isMenuOpen {
+    _$isMenuOpenAtom.reportRead();
+    return super.isMenuOpen;
+  }
+
+  @override
+  set isMenuOpen(bool value) {
+    _$isMenuOpenAtom.reportWrite(value, super.isMenuOpen, () {
+      super.isMenuOpen = value;
+    });
+  }
+
+  late final _$isPlayingAtom =
+      Atom(name: '_HomeScreenStore.isPlaying', context: context);
+
+  @override
+  bool get isPlaying {
+    _$isPlayingAtom.reportRead();
+    return super.isPlaying;
+  }
+
+  @override
+  set isPlaying(bool value) {
+    _$isPlayingAtom.reportWrite(value, super.isPlaying, () {
+      super.isPlaying = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
-categoryIndex: ${categoryIndex}
+categoryIndex: ${categoryIndex},
+soundIndex: ${soundIndex},
+isMenuOpen: ${isMenuOpen},
+isPlaying: ${isPlaying}
     ''';
   }
 }

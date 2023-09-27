@@ -3,93 +3,161 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:white_noice_concept_app/constants/app_data.dart';
 import 'package:white_noice_concept_app/modules/home/home_screen_store.dart';
+import 'package:white_noice_concept_app/modules/home/widgets/category_tile.dart';
 import 'package:white_noice_concept_app/resources/images.dart';
+import 'package:white_noice_concept_app/resources/vectors.dart';
+import 'package:white_noice_concept_app/values/app_colors.dart';
+import 'package:white_noice_concept_app/widgets/rounded_button.dart';
 
-class CategoryBar extends StatelessWidget {
-  CategoryBar({super.key});
+class CategoryBar extends StatefulObserverWidget {
+  const CategoryBar({super.key});
+
+  @override
+  State<CategoryBar> createState() => _CategoryBarState();
+}
+
+class _CategoryBarState extends State<CategoryBar>
+    with SingleTickerProviderStateMixin {
+  late final Animation<double> _rotateAnimation;
 
   final _store = Modular.get<HomeScreenStore>();
 
   @override
+  void initState() {
+    _store.initializeMenuAnimCtrl(this);
+
+    _rotateAnimation = Tween<double>(
+      begin: 0,
+      end: 0.12,
+    ).animate(
+      CurvedAnimation(
+        parent: _store.menuAnimCtrl,
+        curve: Curves.easeIn,
+      ),
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _store.menuAnimCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Expanded(
+      flex: _store.isMenuOpen ? 3 : 1,
       child: SafeArea(
         child: Column(
           children: [
-            const SizedBox(
-              height: 50,
+            Padding(
+              padding: const EdgeInsets.only(
+                right: 20,
+              ),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: RotationTransition(
+                  turns: _rotateAnimation,
+                  child: RoundedButton(
+                    icon: Vectors.menu,
+                    size: 40,
+                    onTap: () {
+                      if (_store.isMenuOpen) {
+                        _store.closeMenu();
+                      } else {
+                        _store.openMenu();
+                      }
+                    },
+                    padding: false,
+                    bgColor: Colors.transparent,
+                    fgColor: AppColors.grey,
+                  ),
+                ),
+              ),
             ),
             Expanded(
               child: RotatedBox(
-                quarterTurns: 3,
+                quarterTurns: _store.isMenuOpen ? 4 : 3,
                 child: Align(
                   child: ListView.separated(
                     shrinkWrap: true,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 30,
                     ),
-                    scrollDirection: Axis.horizontal,
+                    scrollDirection:
+                        _store.isMenuOpen ? Axis.vertical : Axis.horizontal,
                     itemCount: AppData.categories.length,
                     itemBuilder: (context, index) => Align(
                       child: InkWell(
-                        onTap: () => _store.changeCategory(index),
+                        onTap: () => _store.setCategory(index),
+                        overlayColor: const MaterialStatePropertyAll(
+                          Colors.transparent,
+                        ),
                         child: AnimatedSize(
                           duration: const Duration(milliseconds: 400),
                           alignment: Alignment.centerRight,
-                          child: Row(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              Observer(
-                                builder: (context) {
-                                  final isActive =
-                                      _store.categoryIndex == index;
-                                  if (isActive) {
-                                    return const Padding(
-                                      padding: EdgeInsets.only(
-                                        right: 12,
-                                      ),
-                                      child: CircleAvatar(
-                                        radius: 4,
-                                        backgroundColor: Colors.blue,
-                                      ),
-                                    );
-                                  }
-                                  return const SizedBox();
-                                },
+                              Row(
+                                children: [
+                                  Observer(
+                                    builder: (context) {
+                                      final isActive =
+                                          _store.categoryIndex == index;
+                                      if (isActive) {
+                                        return const Padding(
+                                          padding: EdgeInsets.only(
+                                            right: 12,
+                                          ),
+                                          child: CircleAvatar(
+                                            radius: 4,
+                                            backgroundColor: Colors.blue,
+                                          ),
+                                        );
+                                      }
+                                      return const SizedBox();
+                                    },
+                                  ),
+                                  Text(
+                                    AppData.categories[index].name
+                                        .toUpperCase(),
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Text(
-                                AppData.categories[index],
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.grey,
+                              if (_store.isMenuOpen)
+                                CategoryTile(
+                                  index: index,
                                 ),
-                              ),
                             ],
                           ),
                         ),
                       ),
                     ),
                     separatorBuilder: (_, __) => SizedBox(
-                      width: MediaQuery.sizeOf(context).height * 0.08,
+                      width: _store.isMenuOpen
+                          ? null
+                          : MediaQuery.sizeOf(context).height * 0.08,
                     ),
                   ),
                 ),
-                // child: Row(
-                //   children: List.generate(
-                //     AppData.categories.length,
-                //     (index) => Text(
-                //       AppData.categories[index],
-                //     ),
-                //   ),
-                // ),
               ),
             ),
             const SizedBox(
-              height: 30,
+              height: 20,
             ),
-            CircleAvatar(
+            const CircleAvatar(
               backgroundImage: NetworkImage(
                 Images.person1,
               ),
+            ),
+            const SizedBox(
+              height: 16,
             ),
           ],
         ),
