@@ -1,5 +1,9 @@
 # White Noice app
 
+<img width="360" alt="Image 1" src="https://github.com/Yash-Dhrangdhariya/white_noice_concept_app/assets/72062416/7afd8491-fa01-4630-8a29-7dc244cdc2fe">
+
+<img width="360" alt="Image 2" src="https://github.com/Yash-Dhrangdhariya/white_noice_concept_app/assets/72062416/68933ce0-8c56-4cd5-8347-2ea4580fe5d1">
+
 - Made with Flutter 💙
 
 ## Desiged By
