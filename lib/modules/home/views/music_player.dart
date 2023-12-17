@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:white_noice_concept_app/modules/home/home_screen_store.dart';
-import 'package:white_noice_concept_app/resources/vectors.dart';
-import 'package:white_noice_concept_app/widgets/rounded_button.dart';
+
+import '../../../resources/vectors.dart';
+import '../../../widgets/rounded_button.dart';
+import '../home_screen_store.dart';
 
 class MusicPlayer extends StatefulObserverWidget {
   const MusicPlayer({super.key});
@@ -45,19 +46,11 @@ class _MusicPlayerState extends State<MusicPlayer>
         width: 300,
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
                 IconButton(
-                  onPressed: () {
-                    if (_store.isPlaying) {
-                      _store.pause();
-                    } else {
-                      _store.play();
-                    }
-                  },
+                  onPressed: _store.isPlaying ? _store.pause : _store.play,
                   style: IconButton.styleFrom(
                     backgroundColor: Colors.grey.shade200,
                   ),
@@ -72,20 +65,16 @@ class _MusicPlayerState extends State<MusicPlayer>
                     onChanged: (value) {},
                   ),
                 ),
-                const SizedBox(
-                  width: 10,
-                ),
+                const SizedBox(width: 10),
                 RoundedButton(
-                  onTap: () {},
                   icon: Vectors.waves,
+                  onTap: () {},
                   size: 20,
                 ),
-                const SizedBox(
-                  width: 10,
-                ),
+                const SizedBox(width: 10),
                 RoundedButton(
-                  onTap: () {},
                   icon: Vectors.shuffle,
+                  onTap: () {},
                   size: 20,
                 ),
               ],

@@ -8,18 +8,15 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           HomeBody(),
-          SafeArea(
-            child: VerticalDivider(
-              color: Colors.grey,
-              width: 1,
-            ),
+          const SafeArea(
+            child: VerticalDivider(color: Colors.grey, width: 1),
           ),
-          CategoryBar(),
+          const CategoryBar(),
         ],
       ),
     );

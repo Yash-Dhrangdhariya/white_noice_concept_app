@@ -13,20 +13,16 @@ class CategoryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 20,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: 20),
         child: SizedBox(
           width: 240,
           height: 180,
           child: DecoratedBox(
             decoration: BoxDecoration(
               color: Colors.black,
-              borderRadius: BorderRadius.circular(22),
+              borderRadius: const BorderRadius.all(Radius.circular(22)),
               image: DecorationImage(
-                image: NetworkImage(
-                  AppData.categories[index].image,
-                ),
+                image: NetworkImage(AppData.categories[index].image),
                 colorFilter: const ColorFilter.mode(
                   Colors.black38,
                   BlendMode.srcOver,
@@ -57,9 +53,7 @@ class CategoryTile extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(
-                    height: 16,
-                  ),
+                  const SizedBox(height: 16),
                   Text(
                     AppData.categories[index].desc,
                     style: const TextStyle(

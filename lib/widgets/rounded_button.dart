@@ -21,28 +21,22 @@ class RoundedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(30),
-        child: ClipOval(
-          child: ColoredBox(
-            color: bgColor ?? Colors.grey.shade200,
-            child: Padding(
-              padding: EdgeInsets.all(
-                padding ? 10 : 0,
-              ),
-              child: SvgPicture.asset(
-                icon,
-                colorFilter: fgColor != null
-                    ? ColorFilter.mode(
-                        fgColor!,
-                        BlendMode.srcIn,
-                      )
-                    : null,
-                width: size,
-              ),
+    return GestureDetector(
+      onTap: onTap,
+      child: ClipOval(
+        child: ColoredBox(
+          color: bgColor ?? Colors.grey.shade200,
+          child: Padding(
+            padding: EdgeInsets.all(padding ? 10 : 0),
+            child: SvgPicture.asset(
+              icon,
+              width: size,
+              colorFilter: fgColor != null
+                  ? ColorFilter.mode(
+                      fgColor!,
+                      BlendMode.srcIn,
+                    )
+                  : null,
             ),
           ),
         ),

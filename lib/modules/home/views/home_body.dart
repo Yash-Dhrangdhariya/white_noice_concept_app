@@ -2,83 +2,65 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:white_noice_concept_app/constants/app_data.dart';
-import 'package:white_noice_concept_app/modules/home/home_screen_store.dart';
-import 'package:white_noice_concept_app/modules/home/views/music_player.dart';
-import 'package:white_noice_concept_app/modules/home/widgets/active_album.dart';
-import 'package:white_noice_concept_app/modules/home/widgets/music_tile.dart';
-import 'package:white_noice_concept_app/resources/vectors.dart';
-import 'package:white_noice_concept_app/values/app_colors.dart';
+
+import '../../../constants/app_data.dart';
+import '../../../resources/vectors.dart';
+import '../../../values/app_colors.dart';
+import '../home_screen_store.dart';
+import '../widgets/active_album.dart';
+import '../widgets/music_tile.dart';
+import 'music_player.dart';
 
 class HomeBody extends StatelessObserverWidget {
-  const HomeBody({super.key});
+  HomeBody({super.key});
+
+  final HomeScreenStore _store = Modular.get<HomeScreenStore>();
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      flex: Modular.get<HomeScreenStore>().isMenuOpen ? 2 : 4,
+      flex: _store.isMenuOpen ? 2 : 4,
       child: AnimatedContainer(
-        duration: const Duration(
-          milliseconds: 400,
-        ),
+        duration: const Duration(milliseconds: 400),
         child: SafeArea(
           child: Stack(
             fit: StackFit.expand,
             children: [
               ListView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 children: [
                   Observer(
-                    builder: (context) {
-                      final isMenuOpen =
-                          Modular.get<HomeScreenStore>().isMenuOpen;
-                      if (isMenuOpen) {
-                        return SvgPicture.asset(
-                          Vectors.forest,
-                          width: 30,
-                        );
-                      }
-                      return const Padding(
-                        padding: EdgeInsets.fromLTRB(10, 5, 10, 0),
-                        child: Text(
-                          'White noise',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.grey,
-                          ),
-                        ),
-                      );
+                    builder: (_) {
+                      return _store.isMenuOpen
+                          ? SvgPicture.asset(Vectors.forest, width: 30)
+                          : const Padding(
+                              padding: EdgeInsets.fromLTRB(10, 5, 10, 0),
+                              child: Text(
+                                'White noise',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColors.grey,
+                                ),
+                              ),
+                            );
                     },
                   ),
-                  const ActiveAlbum(),
-                  const SizedBox(
-                    height: 30,
-                  ),
+                  ActiveAlbum(),
+                  const SizedBox(height: 30),
                   ListView.separated(
                     shrinkWrap: true,
-                    separatorBuilder: (_, __) => Observer(
-                      builder: (_) {
-                        if (Modular.get<HomeScreenStore>().isMenuOpen) {
-                          return const SizedBox(
-                            height: 20,
-                          );
-                        }
-                        return const SizedBox(
-                          height: 10,
-                        );
-                      },
-                    ),
+                    itemCount: AppData.sounds.length,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) => MusicTile(
-                      sound: AppData.sounds[index],
-                      index: index,
-                      onTap: () => Modular.get<HomeScreenStore>().setSound(
-                        index,
+                    separatorBuilder: (_, __) => Observer(
+                      builder: (_) => SizedBox(
+                        height: _store.isMenuOpen ? 20 : 10,
                       ),
                     ),
-                    itemCount: AppData.sounds.length,
+                    itemBuilder: (_, index) => MusicTile(
+                      sound: AppData.sounds[index],
+                      index: index,
+                      onTap: () => _store.setSound(index),
+                    ),
                   ),
                 ],
               ),

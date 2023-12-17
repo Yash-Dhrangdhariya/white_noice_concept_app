@@ -1,8 +1,10 @@
-import 'package:white_noice_concept_app/models/category_model.dart';
-import 'package:white_noice_concept_app/models/sound_model.dart';
-import 'package:white_noice_concept_app/resources/images.dart';
+import '../models/category_model.dart';
+import '../models/sound_model.dart';
+import '../resources/images.dart';
 
 class AppData {
+  const AppData._();
+
   static const List<CategoryModel> categories = [
     CategoryModel(
       id: 6,

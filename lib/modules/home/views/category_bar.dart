@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:white_noice_concept_app/constants/app_data.dart';
-import 'package:white_noice_concept_app/modules/home/home_screen_store.dart';
-import 'package:white_noice_concept_app/modules/home/widgets/category_tile.dart';
-import 'package:white_noice_concept_app/resources/images.dart';
-import 'package:white_noice_concept_app/resources/vectors.dart';
-import 'package:white_noice_concept_app/values/app_colors.dart';
-import 'package:white_noice_concept_app/widgets/rounded_button.dart';
+
+import '../../../constants/app_data.dart';
+import '../../../resources/images.dart';
+import '../../../resources/vectors.dart';
+import '../../../values/app_colors.dart';
+import '../../../widgets/rounded_button.dart';
+import '../home_screen_store.dart';
+import '../widgets/category_tile.dart';
 
 class CategoryBar extends StatefulObserverWidget {
   const CategoryBar({super.key});
@@ -52,9 +53,7 @@ class _CategoryBarState extends State<CategoryBar>
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(
-                right: 20,
-              ),
+              padding: const EdgeInsets.only(right: 20),
               child: Align(
                 alignment: Alignment.centerRight,
                 child: RotationTransition(
@@ -82,13 +81,11 @@ class _CategoryBarState extends State<CategoryBar>
                 child: Align(
                   child: ListView.separated(
                     shrinkWrap: true,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 30,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
                     scrollDirection:
                         _store.isMenuOpen ? Axis.vertical : Axis.horizontal,
                     itemCount: AppData.categories.length,
-                    itemBuilder: (context, index) => Align(
+                    itemBuilder: (_, index) => Align(
                       child: InkWell(
                         onTap: () => _store.setCategory(index),
                         overlayColor: const MaterialStatePropertyAll(
@@ -108,9 +105,7 @@ class _CategoryBarState extends State<CategoryBar>
                                           _store.categoryIndex == index;
                                       if (isActive) {
                                         return const Padding(
-                                          padding: EdgeInsets.only(
-                                            right: 12,
-                                          ),
+                                          padding: EdgeInsets.only(right: 12),
                                           child: CircleAvatar(
                                             radius: 4,
                                             backgroundColor: Colors.blue,
@@ -130,10 +125,7 @@ class _CategoryBarState extends State<CategoryBar>
                                   ),
                                 ],
                               ),
-                              if (_store.isMenuOpen)
-                                CategoryTile(
-                                  index: index,
-                                ),
+                              if (_store.isMenuOpen) CategoryTile(index: index),
                             ],
                           ),
                         ),
@@ -148,17 +140,11 @@ class _CategoryBarState extends State<CategoryBar>
                 ),
               ),
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             const CircleAvatar(
-              backgroundImage: NetworkImage(
-                Images.person1,
-              ),
+              backgroundImage: NetworkImage(Images.person1),
             ),
-            const SizedBox(
-              height: 16,
-            ),
+            const SizedBox(height: 16),
           ],
         ),
       ),

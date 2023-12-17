@@ -8,7 +8,7 @@ import 'package:white_noice_concept_app/resources/vectors.dart';
 import 'package:white_noice_concept_app/values/app_colors.dart';
 
 class MusicTile extends StatelessWidget {
-  const MusicTile({
+  MusicTile({
     required this.sound,
     required this.index,
     required this.onTap,
@@ -19,41 +19,35 @@ class MusicTile extends StatelessWidget {
   final VoidCallback onTap;
   final int index;
 
+  final HomeScreenStore _store = Modular.get<HomeScreenStore>();
+
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: InkWell(
+      child: GestureDetector(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(22),
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(
-                height: 50,
-                width: 50,
+              SizedBox.square(
+                dimension: 50,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: const BorderRadius.all(Radius.circular(16)),
                     color: Colors.black26,
                     boxShadow: const [
-                      BoxShadow(
-                        blurRadius: 30,
-                        spreadRadius: -10,
-                      ),
+                      BoxShadow(blurRadius: 30, spreadRadius: -10),
                     ],
                     image: DecorationImage(
-                      image: NetworkImage(
-                        sound.image,
-                      ),
+                      image: NetworkImage(sound.image),
                       fit: BoxFit.cover,
                     ),
                   ),
                   child: Observer(
-                    builder: (context) {
-                      final isActive =
-                          index == Modular.get<HomeScreenStore>().soundIndex;
+                    builder: (_) {
+                      final isActive = index == _store.soundIndex;
                       if (isActive) {
                         return Center(
                           child: CircleAvatar(
@@ -76,42 +70,37 @@ class MusicTile extends StatelessWidget {
                 ),
               ),
               Observer(
-                builder: (context) {
-                  if (Modular.get<HomeScreenStore>().isMenuOpen) {
-                    return const SizedBox();
-                  }
-                  return Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            sound.name,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.grey,
+                builder: (_) {
+                  return _store.isMenuOpen
+                      ? const SizedBox.shrink()
+                      : Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 14),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  sound.name,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.grey,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  '${sound.seconds}s',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: Colors.grey.shade500,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          const SizedBox(
-                            height: 2,
-                          ),
-                          Text(
-                            '${sound.seconds}s',
-                            style: TextStyle(
-                              fontSize: 11,
-                              color: Colors.grey.shade500,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+                        );
                 },
               ),
             ],
