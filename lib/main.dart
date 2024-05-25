@@ -6,6 +6,9 @@ import 'white_noice_app.dart';
 
 void main() {
   runApp(
-    ModularApp(module: AppModules(), child: const WhiteNoiceApp()),
+    ModularApp(
+      module: AppModules(),
+      child: const WhiteNoiceApp(),
+    ),
   );
 }

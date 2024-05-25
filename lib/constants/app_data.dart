@@ -39,16 +39,19 @@ class AppData {
   ];
   static const List<SoundModel> sounds = [
     SoundModel(
+      id: 0,
       image: Images.image1,
       name: 'Sound of wind',
       seconds: 1.34,
     ),
     SoundModel(
+      id: 1,
       image: Images.image2,
       name: 'The cry of insects',
       seconds: 1.34,
     ),
     SoundModel(
+      id: 2,
       image: Images.image3,
       name: 'Bird cry',
       seconds: 1.34,

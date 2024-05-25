@@ -49,26 +49,23 @@ class _CategoryBarState extends State<CategoryBar>
   Widget build(BuildContext context) {
     return Expanded(
       flex: _store.isMenuOpen ? 3 : 1,
-      child: SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(10),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 20),
-              child: Align(
-                alignment: Alignment.centerRight,
+            Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 10),
                 child: RotationTransition(
                   turns: _rotateAnimation,
                   child: RoundedButton(
                     icon: Vectors.menu,
                     size: 40,
-                    onTap: () {
-                      if (_store.isMenuOpen) {
-                        _store.closeMenu();
-                      } else {
-                        _store.openMenu();
-                      }
-                    },
-                    padding: false,
+                    onTap:
+                        _store.isMenuOpen ? _store.closeMenu : _store.openMenu,
+                    padding: EdgeInsets.zero,
                     bgColor: Colors.transparent,
                     fgColor: AppColors.grey,
                   ),
@@ -78,73 +75,46 @@ class _CategoryBarState extends State<CategoryBar>
             Expanded(
               child: RotatedBox(
                 quarterTurns: _store.isMenuOpen ? 4 : 3,
-                child: Align(
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
-                    scrollDirection:
-                        _store.isMenuOpen ? Axis.vertical : Axis.horizontal,
-                    itemCount: AppData.categories.length,
-                    itemBuilder: (_, index) => Align(
-                      child: InkWell(
-                        onTap: () => _store.setCategory(index),
-                        overlayColor: const MaterialStatePropertyAll(
-                          Colors.transparent,
-                        ),
-                        child: AnimatedSize(
-                          duration: const Duration(milliseconds: 400),
-                          alignment: Alignment.centerRight,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Row(
-                                children: [
-                                  Observer(
-                                    builder: (context) {
-                                      final isActive =
-                                          _store.categoryIndex == index;
-                                      if (isActive) {
-                                        return const Padding(
-                                          padding: EdgeInsets.only(right: 12),
-                                          child: CircleAvatar(
-                                            radius: 4,
-                                            backgroundColor: Colors.blue,
-                                          ),
-                                        );
-                                      }
-                                      return const SizedBox();
-                                    },
-                                  ),
-                                  Text(
-                                    AppData.categories[index].name
-                                        .toUpperCase(),
-                                    style: const TextStyle(
-                                      fontSize: 13,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              if (_store.isMenuOpen) CategoryTile(index: index),
-                            ],
-                          ),
+                child: ListView.separated(
+                  shrinkWrap: !_store.isMenuOpen,
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  scrollDirection:
+                      _store.isMenuOpen ? Axis.vertical : Axis.horizontal,
+                  itemCount: AppData.categories.length,
+                  itemBuilder: (_, index) {
+                    final category = AppData.categories[index];
+                    return GestureDetector(
+                      onTap: () => _store.activeCategory = category,
+                      child: Observer(
+                        builder: (_) => CategoryTile(
+                          category: category,
+                          isActive: _store.activeCategory.id == category.id,
+                          showDetailView: _store.isMenuOpen,
                         ),
                       ),
-                    ),
-                    separatorBuilder: (_, __) => SizedBox(
-                      width: _store.isMenuOpen
-                          ? null
-                          : MediaQuery.sizeOf(context).height * 0.08,
-                    ),
+                    );
+                  },
+                  separatorBuilder: (_, __) => SizedBox(
+                    width: _store.isMenuOpen
+                        ? null
+                        : MediaQuery.sizeOf(context).height * 0.08,
                   ),
                 ),
               ),
             ),
             const SizedBox(height: 20),
-            const CircleAvatar(
-              backgroundImage: NetworkImage(Images.person1),
+            const Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: EdgeInsets.only(right: 10),
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(
+                    Images.person1,
+                  ),
+                ),
+              ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 10),
           ],
         ),
       ),

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
+import '../../constants/app_data.dart';
+import '../../models/category_model.dart';
+import '../../models/sound_model.dart';
+
 part 'home_screen_store.g.dart';
 
 class HomeScreenStore = _HomeScreenStore with _$HomeScreenStore;
@@ -10,26 +14,16 @@ abstract class _HomeScreenStore with Store {
   late final AnimationController menuAnimCtrl;
 
   @observable
-  int categoryIndex = 3;
+  CategoryModel activeCategory = AppData.categories.first;
 
   @observable
-  int soundIndex = 0;
+  SoundModel activeMusic = AppData.sounds.first;
 
   @observable
   bool isMenuOpen = false;
 
   @observable
   bool isPlaying = false;
-
-  // ignore: use_setters_to_change_properties
-  void setCategory(int value) {
-    categoryIndex = value;
-  }
-
-  // ignore: use_setters_to_change_properties
-  void setSound(int value) {
-    soundIndex = value;
-  }
 
   void openMenu() {
     isMenuOpen = true;
@@ -54,18 +48,14 @@ abstract class _HomeScreenStore with Store {
   void initializeMusicAnimCtrl(TickerProvider vsync) {
     musicAnimCtrl = AnimationController(
       vsync: vsync,
-      duration: const Duration(
-        milliseconds: 600,
-      ),
+      duration: const Duration(milliseconds: 600),
     );
   }
 
   void initializeMenuAnimCtrl(TickerProvider vsync) {
     menuAnimCtrl = AnimationController(
       vsync: vsync,
-      duration: const Duration(
-        milliseconds: 400,
-      ),
+      duration: const Duration(milliseconds: 400),
     );
   }
 }

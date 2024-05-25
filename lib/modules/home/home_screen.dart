@@ -8,16 +8,20 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          HomeBody(),
-          const SafeArea(
-            child: VerticalDivider(color: Colors.grey, width: 1),
-          ),
-          const CategoryBar(),
-        ],
+    return const Scaffold(
+      // body: MusicPlayer(),
+      body: SafeArea(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            HomeBody(),
+            VerticalDivider(
+              color: Colors.grey,
+              width: 1,
+            ),
+            CategoryBar(),
+          ],
+        ),
       ),
     );
   }

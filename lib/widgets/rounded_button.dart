@@ -6,7 +6,7 @@ class RoundedButton extends StatelessWidget {
     required this.onTap,
     required this.icon,
     required this.size,
-    this.padding = true,
+    this.padding = const EdgeInsets.all(10),
     this.fgColor,
     this.bgColor,
     super.key,
@@ -17,28 +17,24 @@ class RoundedButton extends StatelessWidget {
   final double size;
   final Color? bgColor;
   final Color? fgColor;
-  final bool padding;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: ClipOval(
-        child: ColoredBox(
+      child: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
           color: bgColor ?? Colors.grey.shade200,
-          child: Padding(
-            padding: EdgeInsets.all(padding ? 10 : 0),
-            child: SvgPicture.asset(
-              icon,
-              width: size,
-              colorFilter: fgColor != null
-                  ? ColorFilter.mode(
-                      fgColor!,
-                      BlendMode.srcIn,
-                    )
-                  : null,
-            ),
-          ),
+        ),
+        padding: padding,
+        child: SvgPicture.asset(
+          icon,
+          width: size,
+          colorFilter: fgColor == null
+              ? null
+              : ColorFilter.mode(fgColor!, BlendMode.srcIn),
         ),
       ),
     );
